@@ -14,13 +14,18 @@
 2. Abra o terminal no Codespace (pressione `Ctrl + Aspas (")`) e execute os seguintes comandos para instalar o Node.js:
 
     npm init -y
+   
     npm install express cors sqlite3 sqlite
+   
     npm install --save-dev typescript nodemon ts-node @types/express @types/cors
+   
     npx tsc --init
+   
     mkdir src
+   
     touch src/app.ts
 
-3. Crie um arquivo `.gitignore` na raiz do projeto com o seguinte conteúdo:
+4. Crie um arquivo `.gitignore` na raiz do projeto com o seguinte conteúdo:
 
     node_modules/
     dist/
