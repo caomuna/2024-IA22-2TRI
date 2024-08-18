@@ -11,24 +11,20 @@
    - Clique em **Code**, depois em **Codespaces**, e crie um novo Codespace clicando no botão **+**.
    - Para reabrir o Codespace posteriormente, siga o mesmo procedimento, mas dessa vez clique no nome do Codespace abaixo de **On current branch** (o nome terá um pequeno `main*` abaixo).
 
-2. Abra o terminal no Codespace (pressione `Ctrl + Aspas (")`) e execute os seguintes comandos para instalar o Node.js e as dependências:
+2. Abra o terminal no Codespace (pressione `Ctrl + Aspas (")`) e execute os seguintes comandos para instalar o Node.js:
 
-    ```bash
     npm init -y
     npm install express cors sqlite3 sqlite
     npm install --save-dev typescript nodemon ts-node @types/express @types/cors
     npx tsc --init
     mkdir src
     touch src/app.ts
-    ```
 
 3. Crie um arquivo `.gitignore` na raiz do projeto com o seguinte conteúdo:
 
-    ```plaintext
     node_modules/
     dist/
     database.sqlite
-    ```
 
 ### Configurando o `tsconfig.json`
 
@@ -39,7 +35,6 @@ Abra o arquivo `tsconfig.json` e faça as seguintes alterações:
 
 O arquivo ficará assim:
 
-    ```json
     {
       "compilerOptions": {
         "target": "ES2017",
@@ -52,23 +47,19 @@ O arquivo ficará assim:
         "strict": true
       }
     }
-    ```
 
 ### Configurando o `package.json`
 
 Abra o arquivo `package.json` e substitua o script `"test": "echo \"Error: no test specified\" && exit 1"` pelo seguinte:
 
-    ```json
     "scripts": {
       "dev": "npx nodemon src/app.ts"
     },
-    ```
 
 ### Criando o arquivo inicial do servidor
 
 Dentro da pasta `src`, crie um arquivo chamado `app.ts` com o seguinte conteúdo:
 
-    ```typescript
     import express from 'express';
     import cors from 'cors';
 
@@ -85,15 +76,12 @@ Dentro da pasta `src`, crie um arquivo chamado `app.ts` com o seguinte conteúdo
     app.listen(port, () => {
       console.log(`Server running on port ${port}`);
     });
-    ```
 
 ### Inicializando o servidor
 
 No terminal, execute:
 
-    ```bash
     npm run dev
-    ```
 
 Se tudo estiver correto, você verá a mensagem `Server running on port 3333` no terminal.
 
@@ -105,7 +93,6 @@ Abra o navegador e acesse `http://localhost:3333` ou, após executar o comando `
 
 Crie um arquivo chamado `database.ts` dentro da pasta `src` e adicione o seguinte código:
 
-    ```typescript
     import { open, Database } from 'sqlite';
     import sqlite3 from 'sqlite3';
 
@@ -131,13 +118,11 @@ Crie um arquivo chamado `database.ts` dentro da pasta `src` e adicione o seguint
       instance = db;
       return db;
     }
-    ```
 
 ### Adicionando o banco de dados ao servidor
 
 Substitua o código do arquivo `src/app.ts` pelo seguinte:
 
-    ```typescript
     import express from 'express';
     import cors from 'cors';
     import { connect } from './database';
@@ -169,7 +154,6 @@ Substitua o código do arquivo `src/app.ts` pelo seguinte:
     app.listen(port, () => {
       console.log(`Server running on port ${port}`);
     });
-    ```
 
 ### Testando com o Postman
 
@@ -181,40 +165,33 @@ Substitua o código do arquivo `src/app.ts` pelo seguinte:
 
 Faça uma requisição POST para `http://localhost:3333/users` com o seguinte corpo JSON:
 
-    ```json
     {
       "name": "John Doe",
       "email": "johndoe@mail.com"
     }
-    ```
 
 Lembre-se de tornar a porta do localhost pública no Codespace. Após isso, clique em **Send** no Postman. Se tudo der certo, você verá a resposta com o usuário inserido:
 
-    ```json
     {
       "id": 1,
       "name": "John Doe",
       "email": "johndoe@mail.com"
     }
-    ```
 
 ### Listando os usuários
 
 Adicione a seguinte rota no servidor, abaixo do `res.json(user);`:
 
-    ```typescript
     app.get('/users', async (req, res) => {
       const db = await connect();
       const users = await db.all('SELECT * FROM users');
       res.json(users);
     });
-    ```
 
 ### Editando um usuário
 
 Adicione a rota `/users/:id` ao servidor:
 
-    ```typescript
     app.put('/users/:id', async (req, res) => {
       const db = await connect();
       const { name, email } = req.body;
@@ -223,13 +200,11 @@ Adicione a rota `/users/:id` ao servidor:
       const user = await db.get('SELECT * FROM users WHERE id = ?', [id]);
       res.json(user);
     });
-    ```
 
 ### Deletando um usuário
 
 Adicione a rota `/users/:id` ao servidor:
 
-    ```typescript
     app.delete('/users/:id', async (req, res) => {
       const db = await connect();
       const { id } = req.params;
@@ -238,13 +213,11 @@ Adicione a rota `/users/:id` ao servidor:
 
       res.json({ message: 'User deleted' });
     });
-    ```
 
 ### Criando o `index.html`
 
 Crie uma pasta chamada `public` e dentro dela, crie um arquivo chamado `index.html`. Adicione o seguinte código:
 
-    ```html
     <!DOCTYPE html>
     <html lang="en">
 
@@ -318,6 +291,5 @@ Crie uma pasta chamada `public` e dentro dela, crie um arquivo chamado `index.ht
             const btEditar = tr.querySelector('button.editar')
 
             btExcluir.addEvent
-    ```
 
 Agora você pode copiar e colar este conteúdo diretamente no seu arquivo markdown no GitHub!
